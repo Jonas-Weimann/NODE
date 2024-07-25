@@ -18,9 +18,12 @@ function ingresarCantidadDePersonas() {
     } else console.log(totalPersonas);
 }
 
-ingresarTotal();
-ingresarCantidadDePersonas();
+function inicializar() {
+    ingresarTotal();
+    ingresarCantidadDePersonas();
+}
 
+inicializar()
 
 //Calculando el monto justo por persona
 let montoJusto = total / totalPersonas;
@@ -45,6 +48,7 @@ function ingresarAporte() {
     } return aporte
 }
 
+let aporteTotal = 0
 
 for (let i= 0; i < totalPersonas; i++) {
     let persona = {
@@ -52,6 +56,24 @@ for (let i= 0; i < totalPersonas; i++) {
         aporte: ingresarAporte(),
     }
     personas.push(persona)
+    aporteTotal = aporteTotal + persona.aporte
 }
 
+console.log(personas)
+console.log(aporteTotal)
+
+let vuelto = aporteTotal-total
+
+if (aporteTotal < total) {
+    alert('El monto aportado no es suficiente!')
+    window.location.reload();
+} else {
+    alert('El vuelto es de ' + vuelto)
+}
+
+//Reparticion del vuelto:
+//El vuelto sera dado en mayor parte a quien haya aportado más, hasta que este llegue al monto justo.
+//En caso de que este llegue al monto justo, se continuará con el siguiente aportante
+
+personas.sort((a,b) => b.aporte - a.aporte)
 console.log(personas)
