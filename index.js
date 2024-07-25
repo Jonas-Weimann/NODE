@@ -77,3 +77,12 @@ if (aporteTotal < total) {
 
 personas.sort((a,b) => b.aporte - a.aporte)
 console.log(personas)
+
+let i = 0
+let aportanteMayor = personas[i]
+let exceso = aportanteMayor.aporte - montoJusto
+if (vuelto > exceso) {
+    aportanteMayor.aporte = aportanteMayor.aporte - vuelto + exceso
+    let sobrante = vuelto - exceso
+
+}
