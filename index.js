@@ -79,10 +79,39 @@ personas.sort((a,b) => b.aporte - a.aporte)
 console.log(personas)
 
 let i = 0
-let aportanteMayor = personas[i]
-let exceso = aportanteMayor.aporte - montoJusto
-if (vuelto > exceso) {
-    aportanteMayor.aporte = aportanteMayor.aporte - vuelto + exceso
-    let sobrante = vuelto - exceso
 
+function actualizarAportante(i) {
+    if (i < personas.length && personas[i].aporte == montoJusto && vuelto != 0 ) {
+        darVuelto(i + 1)
+    }
 }
+
+function chequearVuelto(){
+    if (vuelto == 0){
+        alert('Todo el vuelto fue repartido')
+        console.log(personas[i])
+        console.log(personas)
+}}
+
+function darVuelto(i) {
+    let aportanteMayor = personas[i]
+    let exceso = parseInt(personas[i].aporte)
+    exceso = exceso - montoJusto;
+    if (vuelto > exceso) {
+        vuelto = vuelto - exceso
+        alert('Se le debe dar ' + vuelto + 'de vuelto a ' + aportanteMayor.nombre)
+        aportanteMayor.aporte = aportanteMayor.aporte - exceso
+        actualizarAportante(i)
+    } else if (exceso > vuelto > 0) {
+        aportanteMayor.aporte = aportanteMayor.aporte - vuelto
+        alert('Se le debe dar ' + vuelto + 'de vuelto a ' + aportanteMayor.nombre)
+
+    }
+    if (i> personas.lenght) {
+        chequearVuelto()
+    }
+}
+
+
+
+darVuelto(0)
