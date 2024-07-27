@@ -7,7 +7,7 @@ function ingresarTotal() {
     if (isNaN(total)) {
         alert('La expresión ingresada no es un número!')
         ingresarTotal()
-    } else console.log(total);
+    }
 }
 
 function ingresarCantidadDePersonas() {
@@ -15,7 +15,7 @@ function ingresarCantidadDePersonas() {
     if (isNaN(totalPersonas)) {
         alert('La expresión ingresada no es un número!')
         ingresarCantidadDePersonas()
-    } else console.log(totalPersonas);
+    }
 }
 
 function inicializar() {
@@ -26,9 +26,8 @@ function inicializar() {
 inicializar()
 
 //Calculando el monto justo por persona
-let montoJusto = total / totalPersonas;
+let montoJusto = Math.round(total / totalPersonas);
 alert('El monto justo por persona es de ' + montoJusto)
-console.log(montoJusto)
 
 //Inicializando array de personas
 let personas = []
@@ -59,16 +58,16 @@ for (let i= 0; i < totalPersonas; i++) {
     aporteTotal = aporteTotal + persona.aporte
 }
 
-console.log(personas)
-console.log(aporteTotal)
 
 let vuelto = aporteTotal-total
 
 if (aporteTotal < total) {
     alert('El monto aportado no es suficiente!')
     window.location.reload();
-} else {
+} else if (vuelto > 0){
     alert('El vuelto es de ' + vuelto)
+} else {
+    alert('Aportaron lo justo, no hay vuelto!')
 }
 
 //Reparticion del vuelto:
@@ -76,7 +75,6 @@ if (aporteTotal < total) {
 //En caso de que este llegue al monto justo, se continuará con el siguiente aportante
 
 personas.sort((a,b) => b.aporte - a.aporte)
-console.log(personas)
 
 let i = 0
 
@@ -85,22 +83,24 @@ function darVuelto(i) {
         let aportanteMayor = personas[i]
         let exceso = parseInt(personas[i].aporte)
         exceso = exceso - montoJusto;
-        if (vuelto > exceso) {
+        if (vuelto > exceso && vuelto > 0) {
             vuelto = vuelto - exceso
             alert('Se le debe dar ' + exceso + ' de vuelto a ' + aportanteMayor.nombre)
             aportanteMayor.aporte = aportanteMayor.aporte - exceso
             darVuelto(i + 1)
-        } else if (exceso >= vuelto && vuelto != 0) {
+        } else if (exceso >= vuelto && vuelto > 0 && vuelto != 0) {
             aportanteMayor.aporte = aportanteMayor.aporte - vuelto
             alert('Se le debe dar ' + vuelto + ' de vuelto a ' + aportanteMayor.nombre)
             vuelto = vuelto - vuelto
             darVuelto(i + 1)
+        } else if (vuelto == 0) {
+            alert('Todo el vuelto fue devuelto')
         }
     } else if (vuelto == 0) {
-        alert('Todo el vuelto fue devuelto' + vuelto)
+        alert('Todo el vuelto fue devuelto')
     }
 }
 
-
-
 darVuelto(0)
+console.log(personas)
+
