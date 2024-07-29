@@ -4,9 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EL VUELTERO</title>
+    <link rel="stylesheet" href="styles.css">
     <script async src="index.js"></script>
 </head>
 <body>
-    
+    <h1>EL VUELTERO</h1>
+    <div class="input-wrapper">
+        <div class="ingresar-total">
+            <input type="number" class="input" id="total-a-pagar" aria-label="Ingresa el TOTAL A PAGAR">
+            <label for="total-a-pagar"> Ingresa el TOTAL A PAGAR</label>
+        </div>
+        <div class="ingresar-personas">
+            <input type="number" class="input" id="cantidad-personas" aria-label="Ingresa la CANTIDAD DE PERSONAS">
+            <label for="cantidad-personas">Ingresa la CANTIDAD DE PERSONAS</label>
+        </div>
+        <input class="enviar" type="submit">
+    </div>
+    <div class="data-wrapper">
+        <div id="mostrar-monto-justo" class="mostrar-monto-justo"></div>
+        <div class="personas-wrapper"></div>
+        <div id="mostrar-vuelto" class="mostrar-vuelto"></div>
+    </div>
 </body>
 </html>

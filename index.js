@@ -1,33 +1,68 @@
-// //Iniciando las variables total y total de personas
+//Obteniendo información de los inputs
 let total
 let totalPersonas
+let montoJusto
+let divMontoJusto = document.querySelector('.mostrar-monto-justo')
+let divVuelto = document.querySelector('.mostrar-vuelto')
+let inputWrapper = document.querySelector('.input-wrapper')
+let personasWrapper = document.querySelector('.personas-wrapper')
 
-function ingresarTotal() {
-    total = parseInt(prompt('¿Cuánto es el importe total a pagar? Ingrese solo números'))
-    if (isNaN(total)) {
-        alert('La expresión ingresada no es un número!')
-        ingresarTotal()
-    }
+const botonEnviar = document.querySelector('.enviar')
+const pics = [
+    'url("images/anaconda.png")',
+    'url("images/deer.png")',
+    'url("images/dinosaur.png")',
+    'url("images/ganesha.png")',
+    'url("images/koi.png")',
+    'url("images/macaw.png")',
+    'url("images/panda-bear.png")',
+    'url("images/parrot.png")',
+    'url("images/tiger.png")',
+    'url("images/turtle.png")',
+];
+
+function asignarImagenRandom(pic) {
+    let a = Math.floor(Math.random() * pics.length);
+    let bgImg = pics[a];
+    pic.style.backgroundImage = bgImg;
 }
 
-function ingresarCantidadDePersonas() {
-    totalPersonas = parseInt(prompt('¿Entre cuántas personas se dividirá la cuenta? Ingrese solo números'))
-    if (isNaN(totalPersonas)) {
-        alert('La expresión ingresada no es un número!')
-        ingresarCantidadDePersonas()
-    }
+botonEnviar.addEventListener('click', ()=>{
+    total = document.getElementById('total-a-pagar').value
+    totalPersonas = document.getElementById('cantidad-personas').value
+    numero = totalPersonas
+    montoJusto = Math.round(total / totalPersonas);
+    escribirMontoJusto()
+    crearPersonas(numero)
+})
+// Al ingresar el total de personas, se tienen que crear tantos divs como personas haya. Cada div con las mismas caracteristicas.
+// Para hacer esto, al hacer click en ENVIAR se obtendrá el value del input totalPersonas lo cual usaremos en la funcion como parametro.
+// Cada persona tendrá como input, un nombre y un aporte, también hay que crear un nuevo botón de submit.
+
+function crearPersonas(numero) {
+    for (let i = 1; i <= numero; i++) {
+    personasWrapper.innerHTML += `<div class="persona"><div class="imagen-persona" id="imagen-persona-${i}"></div><input type="text" class="persona-${i} nombre-persona"><label>Ingresa el nombre de la persona ${i}</label>
+<input type="number" class="aporte-${numero} aporte-persona"><label>Ingresa el aporte de la persona ${i}</label></div>`
+    let pic = document.getElementById(`imagen-persona-${i}`);
+    asignarImagenRandom(pic)
+}
+personasWrapper.innerHTML += '<input type="submit" class="personas-submit">'
 }
 
-function inicializar() {
-    ingresarTotal();
-    ingresarCantidadDePersonas();
-}
-
-inicializar()
+function escribirMontoJusto() {
+    if (isNaN(montoJusto)) {
+        divMontoJusto.innerHTML = 'No escribiste nada pajin!!!';
+        divMontoJusto.classList.add('error')
+    } else if(montoJusto == 'Infinity'){
+        divMontoJusto.innerHTML = 'Como van a ser 0 personas boludin';
+        divMontoJusto.classList.add('error')
+    } else {
+        inputWrapper.classList.add('desactivado')
+        divMontoJusto.classList.add('activado')
+        divMontoJusto.innerHTML = `El monto justo por persona es de ${montoJusto}`;
+}}
 
 //Calculando el monto justo por persona
-let montoJusto = Math.round(total / totalPersonas);
-alert('El monto justo por persona es de ' + montoJusto)
 
 //Inicializando array de personas
 let personas = []
@@ -61,13 +96,15 @@ for (let i= 0; i < totalPersonas; i++) {
 
 let vuelto = aporteTotal-total
 
-if (aporteTotal < total) {
-    alert('El monto aportado no es suficiente!')
-    window.location.reload();
-} else if (vuelto > 0){
-    alert('El vuelto es de ' + vuelto)
-} else {
-    alert('Aportaron lo justo, no hay vuelto!')
+function revisarAporteTotal() {
+    if (aporteTotal < total) {
+        alert('El monto aportado no es suficiente!')
+        window.location.reload();
+    } else if (vuelto > 0){
+        alert('El vuelto es de ' + vuelto)
+    } else {
+        alert('Aportaron lo justo, no hay vuelto!')
+    }
 }
 
 //Reparticion del vuelto:
@@ -142,6 +179,7 @@ for (let i = 0; i< deudores.length; i++) {
             alert( deudores[i].nombre + ' le debe ' + deudores[i].aporte + ' a ' + acreedores[j].nombre)
             acreedores[j].aporte = acreedores[j].aporte - deudores[i].aporte;
             deudores[i].aporte = 0
+            console.log('Deudas saldadas con ' + deudores[i].nombre)
         } else if (deudores[i].aporte > acreedores[j].aporte && deudores[i].aporte != 0) {
             alert( deudores[i].nombre + ' le debe ' + acreedores[j].aporte + ' a ' + acreedores[j].nombre)
             deudores[i].aporte = deudores[i].aporte - acreedores[j].aporte
