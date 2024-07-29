@@ -32,10 +32,12 @@ h1 {
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    padding: 4dvw;
+
 }
 
 .ingresar-total{
-    margin: 1em 1dvw;
+    margin: 1em 4dvw;
 }
 
 .ingresar-personas {
@@ -56,19 +58,19 @@ h1 {
     max-width: 500px;
 }
 
-.input, .enviar {
+.input, .enviar, .personas-submit {
     background: var(--input-bg-color);
     border: var(--input-brd-color) 4px solid;
     border-radius: 10px;
     outline: none;
-    font-size: 2em;
+    font-size: 1.5em;
     color: #1c201a;
     font-weight: 600;
     padding: .25em .5em;
     transition: all .1s;
 }
 
-.enviar:hover {
+.enviar:hover, .personas-submit:hover {
     scale: 1.2;
     transition: all .3s;
     cursor: pointer;
@@ -101,9 +103,11 @@ h1 {
     padding: 1em;
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
     border-radius: 10px;
-    font-size: 1.5em;
+    font-size: 1.3em;
+    text-align: center;
     color: #1c201a;
     margin-top: 1em;
+    margin: 1em 3dvw 0 3dvw;
     transition: all .5s;
     transform: translateY(-5rem);
 }
@@ -134,6 +138,8 @@ h1 {
     justify-content: center;
     flex-direction: column;
     flex-wrap: wrap;
+    width: 100%;
+    padding: 0 40px;
 }
 
 .persona {
@@ -172,8 +178,8 @@ h1 {
 
 .persona label {
     color: #dbffe4;
-    margin-top: -1em;
-    font-size: 1.5rem;
+    margin-top: -1.5em;
+    font-size: 1.1rem;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     justify-content: center;
     text-align: center;
