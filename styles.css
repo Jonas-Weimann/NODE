@@ -18,13 +18,16 @@ body {
     justify-content: center;
     flex-direction: column;
     flex-wrap: wrap;
+    max-width: 100vw;
 }
 
 h1 {
     padding: 1em;
     font-size: 3rem;
+    max-width: 100vw;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     color: var(--tt-color);
+    text-align: center;
 }
 
 .input-wrapper {
@@ -33,6 +36,7 @@ h1 {
     align-items: center;
     justify-content: center;
     padding: 4dvw;
+    max-width: 80%;
 
 }
 
@@ -77,10 +81,13 @@ h1 {
 }
 .input-wrapper label {
     font-size: 1.5rem;
+    word-wrap: break-word;
+    width: 100%;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     justify-content: center;
     text-align: center;
-    text-wrap: nowrap;
+    white-space: initial;
+    overflow: hidden;
 }
 
 .mostrar-monto-justo.error {
@@ -179,11 +186,16 @@ h1 {
 .persona label {
     color: #dbffe4;
     margin-top: -1.5em;
+    padding: 0 1em;
     font-size: 1.1rem;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     justify-content: center;
     text-align: center;
     text-wrap: nowrap;
+    word-wrap: break-word;
+    width: 100%;
+    white-space: initial;
+    overflow: hidden;
 }
 
 .oculto {

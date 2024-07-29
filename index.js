@@ -46,8 +46,8 @@ function crearPersonas(numero) {
     let pic = document.getElementById(`imagen-persona-${i}`);
     asignarImagenRandom(pic)
 }
-personasWrapper.innerHTML += '<input type="submit" class="personas-submit">'
-}
+if (divMontoJusto.classList.contains('activado')){personasWrapper.innerHTML += '<input type="submit" class="personas-submit">'
+}}
 
 function escribirMontoJusto() {
     if (isNaN(montoJusto)) {
