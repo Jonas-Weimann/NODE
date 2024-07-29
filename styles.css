@@ -198,6 +198,20 @@ h1 {
     overflow: hidden;
 }
 
+.personas-submit {
+    visibility: hidden;
+}
+
+.personas-submit.activado {
+    visibility: visible;
+    
+}
+
+.error {
+    color: red;
+    font-weight: 500;
+}
+
 .oculto {
     visibility: hidden;
 }

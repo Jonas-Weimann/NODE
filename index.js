@@ -6,6 +6,8 @@ let divMontoJusto = document.querySelector('.mostrar-monto-justo')
 let divVuelto = document.querySelector('.mostrar-vuelto')
 let inputWrapper = document.querySelector('.input-wrapper')
 let personasWrapper = document.querySelector('.personas-wrapper')
+let personasSubmit
+let divPersonasSubmit = document.querySelector('.personas-submit')
 
 const botonEnviar = document.querySelector('.enviar')
 const pics = [
@@ -35,6 +37,9 @@ botonEnviar.addEventListener('click', ()=>{
     escribirMontoJusto()
     crearPersonas(numero)
 })
+
+
+
 // Al ingresar el total de personas, se tienen que crear tantos divs como personas haya. Cada div con las mismas caracteristicas.
 // Para hacer esto, al hacer click en ENVIAR se obtendrá el value del input totalPersonas lo cual usaremos en la funcion como parametro.
 // Cada persona tendrá como input, un nombre y un aporte, también hay que crear un nuevo botón de submit.
@@ -47,6 +52,9 @@ function crearPersonas(numero) {
     asignarImagenRandom(pic)
 }
 if (divMontoJusto.classList.contains('activado')){personasWrapper.innerHTML += '<input type="submit" class="personas-submit">'
+personasSubmit = document.querySelector('.personas-submit')
+personasSubmit.classList.add('activado')
+enviarPersonas()
 }}
 
 function escribirMontoJusto() {
@@ -59,10 +67,28 @@ function escribirMontoJusto() {
     } else {
         inputWrapper.classList.add('desactivado')
         divMontoJusto.classList.add('activado')
+        divMontoJusto.classList.remove('error')
         divMontoJusto.innerHTML = `El monto justo por persona es de ${montoJusto}`;
 }}
 
-//Calculando el monto justo por persona
+
+//Submiteando los datos de las personas
+function enviarPersonas() {
+        personasSubmit.addEventListener('click', ()=>{
+            validarDatos();
+            if (validarDatos == true) {
+                alert('Los datos estan bien amigo muy bien!!!')
+            } else {
+                divPersonasSubmit.classList.add('error')
+            }
+        })
+    }
+
+function validarDatos() {
+    
+}
+
+
 
 //Inicializando array de personas
 let personas = []
