@@ -104,3 +104,50 @@ function darVuelto(i) {
 darVuelto(0)
 console.log(personas)
 
+let acreedores = []
+let deudores = []
+
+function calificarPersonas(i) {
+    if (personas[i].aporte > montoJusto) {
+        acreedores.push(personas[i]);
+    } else if (personas[i].aporte < montoJusto){
+        deudores.push(personas[i])
+    }
+}
+
+for (let i = 0; i < personas.length; i++){
+    calificarPersonas(i)
+}
+console.log(acreedores, deudores)
+
+
+function calcularBonos(i) {
+    acreedores[i].aporte = acreedores[i].aporte - montoJusto; 
+}
+
+function calcularDeudas(i) {
+    deudores[i].aporte = montoJusto - deudores[i].aporte;
+}
+
+for( let i = 0; i < acreedores.length; i++) {
+    calcularBonos(i)
+}
+for( let i = 0; i < deudores.length; i++) {
+    calcularDeudas(i)
+}
+
+for (let i = 0; i< deudores.length; i++) {
+    for (let j = 0; j< acreedores.length; j++) {
+        if (deudores[i].aporte <= acreedores[j].aporte && deudores[i].aporte != 0) {
+            alert( deudores[i].nombre + ' le debe ' + deudores[i].aporte + ' a ' + acreedores[j].nombre)
+            acreedores[j].aporte = acreedores[j].aporte - deudores[i].aporte;
+            deudores[i].aporte = 0
+        } else if (deudores[i].aporte > acreedores[j].aporte && deudores[i].aporte != 0) {
+            alert( deudores[i].nombre + ' le debe ' + acreedores[j].aporte + ' a ' + acreedores[j].nombre)
+            deudores[i].aporte = deudores[i].aporte - acreedores[j].aporte
+            acreedores[j].aporte = 0;
+        } else {
+            console.log('Deudas saldadas con ' + deudores[i].nombre)
+        }
+    }
+}
