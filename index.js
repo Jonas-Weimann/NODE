@@ -55,6 +55,7 @@ if (divMontoJusto.classList.contains('activado')){personasWrapper.innerHTML += '
 personasSubmit = document.querySelector('.personas-submit')
 personasSubmit.classList.add('activado')
 enviarPersonas()
+return personasSubmit
 }}
 
 function escribirMontoJusto() {
@@ -76,16 +77,41 @@ function escribirMontoJusto() {
 function enviarPersonas() {
         personasSubmit.addEventListener('click', ()=>{
             validarDatos();
-            if (validarDatos == true) {
+            if (validarDatos() == true) {
                 alert('Los datos estan bien amigo muy bien!!!')
+                divPersonasSubmit.classList.remove('error')
             } else {
                 divPersonasSubmit.classList.add('error')
+                alert('Hay campos sin completar')
             }
         })
     }
 
 function validarDatos() {
-    
+    let validacionNombres
+    let validacionAportes
+    let inputNombres = document.getElementsByClassName('nombre-persona')
+    let inputAportes = document.getElementsByClassName('aporte-persona')
+
+    for (let i = 0; i < inputNombres.length; i++) {
+        if (inputNombres[i].value.length == 0) {
+            return false
+        } else {
+            validacionNombres = true
+        }
+    }
+    for(let i = 0; i < inputAportes.length; i++) {
+        if (inputAportes[i].value.length == 0 ) {
+            return false
+        } else {
+            validacionAportes = true
+        }
+    }
+    if (validacionAportes == validacionNombres) {
+        return true
+    } else {
+        return false
+    }
 }
 
 
