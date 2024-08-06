@@ -1,6 +1,7 @@
 //Obteniendo información de los inputs
 let total
 let totalPersonas
+let aporteTotal
 let montoJusto
 let divMontoJusto = document.querySelector('.mostrar-monto-justo')
 let divVuelto = document.querySelector('.mostrar-vuelto')
@@ -32,7 +33,7 @@ function asignarImagenRandom(pic) {
 botonEnviar.addEventListener('click', ()=>{
     total = document.getElementById('total-a-pagar').value
     totalPersonas = document.getElementById('cantidad-personas').value
-    numero = totalPersonas
+    globalThis.numero = totalPersonas
     montoJusto = Math.round(total / totalPersonas);
     escribirMontoJusto()
     crearPersonas(numero)
@@ -80,6 +81,9 @@ function enviarPersonas() {
             if (validarDatos() == true) {
                 alert('Los datos estan bien amigo muy bien!!!')
                 divPersonasSubmit.classList.remove('error')
+                crearArrayAportantes()
+                console.log(personas)
+                darVuelto(0)
             } else {
                 divPersonasSubmit.classList.add('error')
                 alert('Hay campos sin completar')
@@ -113,38 +117,45 @@ function validarDatos() {
         return false
     }
 }
+//Creando una clase para los objetos del array de aportantes
 
+let personas = []
+
+class persona {
+    constructor(nombre, aporte) {
+        this.nombre = nombre;
+        this.aporte = aporte;
+    }
+}
+
+function crearArrayAportantes() {
+    let inputNombres = document.getElementsByClassName('nombre-persona')
+    let inputAportes = document.getElementsByClassName('aporte-persona')
+
+    for (let i = 0; i < numero; i++){
+        aporteTotal += inputAportes[i].value
+        personas.push(new persona(inputNombres[i].value, inputAportes[i].value))
+    }
+    return personas
+}
 
 
 //Inicializando array de personas
-let personas = []
-let nombre
-let aporte
+// let nombre
+// let aporte
 
-function ingresarNombre(i) {
-    nombre = prompt('Ingrese el nombre y apellido de la persona ' + (i))
-    return nombre
-}
+// function ingresarNombre(i) {
+//     nombre = prompt('Ingrese el nombre y apellido de la persona ' + (i))
+//     return nombre
+// }
 
-function ingresarAporte() {
-    aporte = parseInt(prompt('¿Cuánto aportó ' + nombre + '? Ingrese solo numeros'))
-    if(isNaN(aporte)) {
-        alert('La expresión ingresada no es un número!')
-        return ingresarAporte()
-    } return aporte
-}
-
-let aporteTotal = 0
-
-for (let i= 0; i < totalPersonas; i++) {
-    let persona = {
-        nombre: ingresarNombre([i + 1]),
-        aporte: ingresarAporte(),
-    }
-    personas.push(persona)
-    aporteTotal = aporteTotal + persona.aporte
-}
-
+// function ingresarAporte() {
+//     aporte = parseInt(prompt('¿Cuánto aportó ' + nombre + '? Ingrese solo numeros'))
+//     if(isNaN(aporte)) {
+//         alert('La expresión ingresada no es un número!')
+//         return ingresarAporte()
+//     } return aporte
+// }
 
 let vuelto = aporteTotal-total
 
@@ -190,8 +201,6 @@ function darVuelto(i) {
     }
 }
 
-darVuelto(0)
-console.log(personas)
 
 let acreedores = []
 let deudores = []
@@ -207,7 +216,6 @@ function calificarPersonas(i) {
 for (let i = 0; i < personas.length; i++){
     calificarPersonas(i)
 }
-console.log(acreedores, deudores)
 
 
 function calcularBonos(i) {
