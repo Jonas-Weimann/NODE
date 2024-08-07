@@ -103,8 +103,8 @@ h1 {
     margin-top: 0em;
     transform: translateY(0rem);
 }
-
-.mostrar-monto-justo {
+/*Arreglar la cagada de las transiciones y los margins y esa poronga*/
+.mostrar-monto-justo,.mostrar-vuelto, .vuelto-a-persona{
     visibility: hidden;
     background: var(--input-bg-color);
     padding: 1em;
@@ -119,24 +119,18 @@ h1 {
     transform: translateY(-5rem);
 }
 
-.mostrar-vuelto {
-    visibility: hidden;
-    background: var(--input-bg-color);
-    padding: 1em;
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-    border-radius: 10px;
-    font-size: 1.5em;
-    color: #1c201a;
-    margin-top: 1em;
+.vuelto-a-persona.activado {
     transition: all .5s;
-    transform: translateY(-4rem);
+    visibility: visible;
+    margin-top: 0em;
+    transform: translateY(0rem);
 }
 
 .mostrar-vuelto.activado {
     transition: all .5s;
     visibility: visible;
     margin-top: 0em;
-    transform: translateY(1rem);
+    transform: translateY(0rem);
 }
 
 .personas-wrapper {

@@ -1,12 +1,17 @@
 //Obteniendo información de los inputs
 let total
 let totalPersonas
-let aporteTotal
-let montoJusto
+let aporteTotal = 0
+let montoJusto = 0
+let vuelto = 0
+let acreedores = []
+let deudores = []
 let divMontoJusto = document.querySelector('.mostrar-monto-justo')
 let divVuelto = document.querySelector('.mostrar-vuelto')
 let inputWrapper = document.querySelector('.input-wrapper')
 let personasWrapper = document.querySelector('.personas-wrapper')
+let titulo = document.getElementsByTagName('h1')
+let repartoWrapper = document.querySelector('.reparto-wrapper')
 let personasSubmit
 let divPersonasSubmit = document.querySelector('.personas-submit')
 
@@ -24,10 +29,13 @@ const pics = [
     'url("images/turtle.png")',
 ];
 
+let icons = []
+
 function asignarImagenRandom(pic) {
     let a = Math.floor(Math.random() * pics.length);
     let bgImg = pics[a];
     pic.style.backgroundImage = bgImg;
+    icons.push(bgImg)
 }
 
 botonEnviar.addEventListener('click', ()=>{
@@ -51,10 +59,13 @@ function crearPersonas(numero) {
 <input type="number" class="aporte-${numero} aporte-persona"><label>Ingresa el aporte de la persona ${i}</label></div>`
     let pic = document.getElementById(`imagen-persona-${i}`);
     asignarImagenRandom(pic)
+
 }
-if (divMontoJusto.classList.contains('activado')){personasWrapper.innerHTML += '<input type="submit" class="personas-submit">'
+if (divMontoJusto.classList.contains('activado')){
+personasWrapper.innerHTML += '<input type="submit" class="personas-submit">'
 personasSubmit = document.querySelector('.personas-submit')
 personasSubmit.classList.add('activado')
+console.log(icons)
 enviarPersonas()
 return personasSubmit
 }}
@@ -81,9 +92,15 @@ function enviarPersonas() {
             if (validarDatos() == true) {
                 alert('Los datos estan bien amigo muy bien!!!')
                 divPersonasSubmit.classList.remove('error')
-                crearArrayAportantes()
-                console.log(personas)
-                darVuelto(0)
+                personas = [];
+                crearArrayAportantes();
+                personas.sort((a,b) => b.aporte - a.aporte)
+                vuelto = aporteTotal-total
+                mostrarVuelto()
+                revisarAporteTotal();
+                calificarPersonas();
+                calcularBonosYDeudas();
+                saldarDeudas();
             } else {
                 divPersonasSubmit.classList.add('error')
                 alert('Hay campos sin completar')
@@ -122,23 +139,63 @@ function validarDatos() {
 let personas = []
 
 class persona {
-    constructor(nombre, aporte) {
+    constructor(nombre, aporte, icon) {
         this.nombre = nombre;
         this.aporte = aporte;
+        this.icon = icon;
     }
 }
 
 function crearArrayAportantes() {
     let inputNombres = document.getElementsByClassName('nombre-persona')
     let inputAportes = document.getElementsByClassName('aporte-persona')
-
     for (let i = 0; i < numero; i++){
-        aporteTotal += inputAportes[i].value
-        personas.push(new persona(inputNombres[i].value, inputAportes[i].value))
+        aporteTotal += parseInt(inputAportes[i].value)
+        personas.push(new persona(inputNombres[i].value, inputAportes[i].value, icons[i]))
     }
     return personas
 }
 
+function mostrarVuelto() {
+    personasWrapper.classList.add('desactivado')
+    divVuelto.classList.add('activado')
+    divVuelto.classList.remove('error')
+    divVuelto.innerHTML = `El vuelto es de ${vuelto}`;
+}
+function darVuelto(i) {
+    if (i < personas.length){
+        let aportanteMayor = personas[i]
+        let exceso = parseInt(personas[i].aporte)
+        let destinatario = aportanteMayor.nombre
+        exceso = exceso - montoJusto;
+        if (vuelto > exceso && vuelto > 0) {
+            vuelto = vuelto - exceso;
+            repartoWrapper.innerHTML += `<div class="vuelto-a-persona">Se le debe dar <span>${exceso}</span> de vuelto a ${destinatario}</div>`;
+            imprimirVueltos()
+            aportanteMayor.aporte -= exceso;
+            darVuelto(i + 1)
+        } else if (exceso >= vuelto && vuelto > 0 && vuelto != 0) {
+            aportanteMayor.aporte = aportanteMayor.aporte - vuelto
+            repartoWrapper.innerHTML += `<div class="vuelto-a-persona">Se le debe dar <span>${exceso}</span> de vuelto a ${destinatario}</div>`;
+            imprimirVueltos()
+            vuelto = vuelto - vuelto
+            darVuelto(i + 1)
+        } else if (vuelto == 0) {
+            console.log('Todo el vuelto fue devuelto')
+        }
+    } else if (vuelto == 0) {
+        console.log('Todo el vuelto fue devuelto')
+    }
+}
+
+function imprimirVueltos() {
+    let vueltitos = document.querySelectorAll('.vuelto-a-persona');
+    vueltitos.forEach(vueltito => {
+        console.log(vueltito)
+        vueltito.classList.add('activado')
+    }
+    )
+}
 
 //Inicializando array de personas
 // let nombre
@@ -157,7 +214,6 @@ function crearArrayAportantes() {
 //     } return aporte
 // }
 
-let vuelto = aporteTotal-total
 
 function revisarAporteTotal() {
     if (aporteTotal < total) {
@@ -165,6 +221,7 @@ function revisarAporteTotal() {
         window.location.reload();
     } else if (vuelto > 0){
         alert('El vuelto es de ' + vuelto)
+        darVuelto(0)
     } else {
         alert('Aportaron lo justo, no hay vuelto!')
     }
@@ -174,47 +231,27 @@ function revisarAporteTotal() {
 //El vuelto sera dado en mayor parte a quien haya aportado más, hasta que este llegue al monto justo.
 //En caso de que este llegue al monto justo, se continuará con el siguiente aportante
 
-personas.sort((a,b) => b.aporte - a.aporte)
 
-let i = 0
 
-function darVuelto(i) {
-    if (i < personas.length){
-        let aportanteMayor = personas[i]
-        let exceso = parseInt(personas[i].aporte)
-        exceso = exceso - montoJusto;
-        if (vuelto > exceso && vuelto > 0) {
-            vuelto = vuelto - exceso
-            alert('Se le debe dar ' + exceso + ' de vuelto a ' + aportanteMayor.nombre)
-            aportanteMayor.aporte = aportanteMayor.aporte - exceso
-            darVuelto(i + 1)
-        } else if (exceso >= vuelto && vuelto > 0 && vuelto != 0) {
-            aportanteMayor.aporte = aportanteMayor.aporte - vuelto
-            alert('Se le debe dar ' + vuelto + ' de vuelto a ' + aportanteMayor.nombre)
-            vuelto = vuelto - vuelto
-            darVuelto(i + 1)
-        } else if (vuelto == 0) {
-            alert('Todo el vuelto fue devuelto')
+
+
+function calificarPersonas() {
+    for (let i = 0; i < personas.length; i++){
+        if (personas[i].aporte > montoJusto) {
+            acreedores.push(personas[i]);
+        } else if (personas[i].aporte < montoJusto){
+            deudores.push(personas[i])
         }
-    } else if (vuelto == 0) {
-        alert('Todo el vuelto fue devuelto')
     }
 }
 
-
-let acreedores = []
-let deudores = []
-
-function calificarPersonas(i) {
-    if (personas[i].aporte > montoJusto) {
-        acreedores.push(personas[i]);
-    } else if (personas[i].aporte < montoJusto){
-        deudores.push(personas[i])
+function calcularBonosYDeudas() {
+    for( let i = 0; i < acreedores.length; i++) {
+        calcularBonos(i)
     }
-}
-
-for (let i = 0; i < personas.length; i++){
-    calificarPersonas(i)
+    for( let i = 0; i < deudores.length; i++) {
+        calcularDeudas(i)
+    }
 }
 
 
@@ -226,26 +263,22 @@ function calcularDeudas(i) {
     deudores[i].aporte = montoJusto - deudores[i].aporte;
 }
 
-for( let i = 0; i < acreedores.length; i++) {
-    calcularBonos(i)
-}
-for( let i = 0; i < deudores.length; i++) {
-    calcularDeudas(i)
-}
-
-for (let i = 0; i< deudores.length; i++) {
-    for (let j = 0; j< acreedores.length; j++) {
-        if (deudores[i].aporte <= acreedores[j].aporte && deudores[i].aporte != 0) {
-            alert( deudores[i].nombre + ' le debe ' + deudores[i].aporte + ' a ' + acreedores[j].nombre)
-            acreedores[j].aporte = acreedores[j].aporte - deudores[i].aporte;
-            deudores[i].aporte = 0
-            console.log('Deudas saldadas con ' + deudores[i].nombre)
-        } else if (deudores[i].aporte > acreedores[j].aporte && deudores[i].aporte != 0) {
-            alert( deudores[i].nombre + ' le debe ' + acreedores[j].aporte + ' a ' + acreedores[j].nombre)
-            deudores[i].aporte = deudores[i].aporte - acreedores[j].aporte
-            acreedores[j].aporte = 0;
-        } else {
-            console.log('Deudas saldadas con ' + deudores[i].nombre)
+function saldarDeudas() {
+    for (let i = 0; i< deudores.length; i++) {
+        for (let j = 0; j< acreedores.length; j++) {
+            if (deudores[i].aporte <= acreedores[j].aporte && deudores[i].aporte != 0) {
+                alert( deudores[i].nombre + ' le debe ' + deudores[i].aporte + ' a ' + acreedores[j].nombre)
+                acreedores[j].aporte = acreedores[j].aporte - deudores[i].aporte;
+                deudores[i].aporte = 0
+                console.log('Deudas saldadas con ' + deudores[i].nombre)
+            } else if (deudores[i].aporte > acreedores[j].aporte && deudores[i].aporte != 0) {
+                alert( deudores[i].nombre + ' le debe ' + acreedores[j].aporte + ' a ' + acreedores[j].nombre)
+                deudores[i].aporte = deudores[i].aporte - acreedores[j].aporte
+                acreedores[j].aporte = 0;
+            } else {
+                console.log('Deudas saldadas con ' + deudores[i].nombre)
+            }
         }
     }
 }
+
